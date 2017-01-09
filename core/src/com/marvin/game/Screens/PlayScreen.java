@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -24,10 +25,15 @@ import com.marvin.game.Mario;
 import com.marvin.game.Scenes.Hud;
 import com.marvin.game.Sprites.Enemy;
 import com.marvin.game.Sprites.Goomba;
+import com.marvin.game.Sprites.Items.Item;
+import com.marvin.game.Sprites.Items.ItemDef;
+import com.marvin.game.Sprites.Items.Mushroom;
 import com.marvin.game.Sprites.MarioSprite;
 import com.marvin.game.Tools.B2WorldCreator;
 import com.marvin.game.Tools.WorldContactListener;
 import com.sun.prism.image.ViewPort;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by marvinreza on 07.01.2017.
@@ -44,6 +50,9 @@ public class PlayScreen implements Screen{
     private MarioSprite player;
 
     private Music music;
+
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -79,6 +88,22 @@ public class PlayScreen implements Screen{
         music = Mario.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
         music.play();
+
+        items =  new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+    }
+
+    public void spawnItem(ItemDef iDef) {
+        itemsToSpawn.add(iDef);
+    }
+
+    public void handleSpawningItems() {
+        if(!itemsToSpawn.isEmpty()) {
+            ItemDef iDef = itemsToSpawn.poll();
+            if(iDef.type == Mushroom.class) {
+                items.add(new Mushroom(this, iDef.position.x, iDef.position.y));
+            }
+        }
     }
 
     @Override
@@ -106,6 +131,7 @@ public class PlayScreen implements Screen{
 
     public void update(float dt) {
        handleInput(dt);
+       handleSpawningItems();
 
        world.step(1/60f , 6 , 2);
 
@@ -115,6 +141,9 @@ public class PlayScreen implements Screen{
            if(enemy.getX() < player.getX() + 224 / Mario.PPM)
                enemy.b2body.setActive(true);
        }
+
+       for(Item item : items)
+           item.update(dt);
 
        hud.update(dt);
 
@@ -143,6 +172,9 @@ public class PlayScreen implements Screen{
         player.draw(game.batch);
         for (Enemy enemy : creator.getGoombas())
             enemy.draw(game.batch);
+
+        for (Item item : items)
+            item.draw(game.batch);
 
         game.batch.end();
 
