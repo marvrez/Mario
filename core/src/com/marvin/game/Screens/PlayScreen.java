@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.marvin.game.Mario;
 import com.marvin.game.Scenes.Hud;
+import com.marvin.game.Sprites.Enemy;
 import com.marvin.game.Sprites.Goomba;
 import com.marvin.game.Sprites.MarioSprite;
 import com.marvin.game.Tools.B2WorldCreator;
@@ -41,7 +42,6 @@ public class PlayScreen implements Screen{
 
     //sprites
     private MarioSprite player;
-    private Goomba goomba;
 
     private Music music;
 
@@ -49,8 +49,10 @@ public class PlayScreen implements Screen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
+    //Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
 
     public PlayScreen(Mario game) {
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
@@ -68,7 +70,7 @@ public class PlayScreen implements Screen{
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(this);
+        creator = new B2WorldCreator(this);
 
         player = new MarioSprite(this);
 
@@ -77,8 +79,6 @@ public class PlayScreen implements Screen{
         music = Mario.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
         music.play();
-
-        goomba = new Goomba(this, 5.64f, .32f);
     }
 
     @Override
@@ -110,7 +110,8 @@ public class PlayScreen implements Screen{
        world.step(1/60f , 6 , 2);
 
        player.update(dt);
-       goomba.update(dt);
+       for (Enemy enemy : creator.getGoombas())
+           enemy.update(dt);
        hud.update(dt);
 
        gameCam.position.x = player.b2body.getPosition().x;
@@ -136,7 +137,8 @@ public class PlayScreen implements Screen{
         game.batch.begin();
 
         player.draw(game.batch);
-        goomba.draw(game.batch);
+        for (Enemy enemy : creator.getGoombas())
+            enemy.draw(game.batch);
 
         game.batch.end();
 
