@@ -113,7 +113,7 @@ public class MarioSprite extends Sprite {
         shape.setRadius(6 / Mario.PPM);
         fDef.filter.categoryBits = Mario.MARIO_BIT;
         fDef.filter.maskBits = Mario.GROUND_BIT | Mario.COIN_BIT | Mario.BRICK_BIT | Mario. ENEMY_BIT |
-                Mario.OBJECT_BIT;
+                Mario.OBJECT_BIT | Mario.ENEMY_HEAD_BIT;
 
         fDef.shape = shape;
         b2body.createFixture(fDef);
