@@ -18,6 +18,7 @@ public class Mario extends Game {
     public static final float PPM = 100;
 
     //bit flags
+	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 0x01;
     public static final short MARIO_BIT = 0x02;
     public static final short BRICK_BIT = 0x04;
@@ -44,6 +45,9 @@ public class Mario extends Game {
 		manager.load("audio/sounds/breakblock.wav", Sound.class);
 		manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
 		manager.load("audio/sounds/powerup.wav", Sound.class);
+		manager.load("audio/sounds/powerdown.wav", Sound.class);
+		manager.load("audio/sounds/stomp.wav", Sound.class);
+		manager.load("audio/sounds/mariodie.wav", Sound.class);
 		manager.finishLoading();
 		setScreen(new PlayScreen(this));
 	}
