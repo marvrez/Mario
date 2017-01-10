@@ -6,32 +6,24 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.marvin.game.Mario;
 import com.marvin.game.Scenes.Hud;
-import com.marvin.game.Sprites.Enemy;
-import com.marvin.game.Sprites.Goomba;
+import com.marvin.game.Sprites.Enemies.Enemy;
 import com.marvin.game.Sprites.Items.Item;
 import com.marvin.game.Sprites.Items.ItemDef;
 import com.marvin.game.Sprites.Items.Mushroom;
 import com.marvin.game.Sprites.MarioSprite;
 import com.marvin.game.Tools.B2WorldCreator;
 import com.marvin.game.Tools.WorldContactListener;
-import com.sun.prism.image.ViewPort;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -87,7 +79,7 @@ public class PlayScreen implements Screen{
 
         music = Mario.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        music.play();
+        //music.play();
 
         items =  new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();

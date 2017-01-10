@@ -1,10 +1,8 @@
-package com.marvin.game.Sprites;
+package com.marvin.game.Sprites.TileObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.maps.MapObject;
 import com.marvin.game.Mario;
 import com.marvin.game.Scenes.Hud;
 import com.marvin.game.Screens.PlayScreen;
@@ -13,8 +11,8 @@ import com.marvin.game.Screens.PlayScreen;
  * Created by marvinreza on 07.01.2017.
  */
 public class Brick extends InteractiveTileObject {
-    public Brick(PlayScreen screen, Rectangle bounds) {
-        super(screen, bounds);
+    public Brick(PlayScreen screen, MapObject object) {
+        super(screen, object);
         fixture.setUserData(this);
         setCategoryFilter(Mario.BRICK_BIT);
     }
