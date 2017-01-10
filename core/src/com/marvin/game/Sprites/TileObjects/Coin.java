@@ -10,6 +10,7 @@ import com.marvin.game.Scenes.Hud;
 import com.marvin.game.Screens.PlayScreen;
 import com.marvin.game.Sprites.Items.ItemDef;
 import com.marvin.game.Sprites.Items.Mushroom;
+import com.marvin.game.Sprites.MarioSprite;
 
 /**
  * Created by marvinreza on 07.01.2017.
@@ -25,7 +26,7 @@ public class Coin extends InteractiveTileObject {
     }
 
     @Override
-    public void onHeadHit() {
+    public void onHeadHit(MarioSprite mario) {
         Gdx.app.log("Coin","Collision");
         if (getCell().getTile().getId() == BLANK_COIN)
             Mario.manager.get("audio/sounds/bump.wav", Sound.class).play();

@@ -39,6 +39,7 @@ public class Mushroom extends Item {
     @Override
     public void use(MarioSprite mario) {
         destroy();
+        mario.grow();
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.marvin.game.Mario;
 import com.marvin.game.Screens.PlayScreen;
+import com.marvin.game.Sprites.MarioSprite;
 
 /**
  * Created by marvinreza on 07.01.2017.
@@ -46,7 +47,7 @@ public abstract class InteractiveTileObject {
         fixture = body.createFixture(fDef);
     }
 
-    public abstract void onHeadHit();
+    public abstract void onHeadHit(MarioSprite mario);
     public void  setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
         filter.categoryBits = filterBit;

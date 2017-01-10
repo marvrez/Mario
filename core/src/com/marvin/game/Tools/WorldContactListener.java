@@ -19,16 +19,14 @@ public class WorldContactListener implements ContactListener {
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
-        if(fixA.getUserData() == "head" || fixB.getUserData() == "head") {
-            Fixture head = fixA.getUserData() == "head" ? fixA : fixB;
-            Fixture object = head == fixA ? fixB : fixA;
-
-            if(object.getUserData() instanceof InteractiveTileObject) {
-                ((InteractiveTileObject) object.getUserData()).onHeadHit();
-            }
-        }
-
         switch (cDef) {
+            case Mario.MARIO_HEAD_BIT | Mario.BRICK_BIT:
+            case Mario.MARIO_HEAD_BIT | Mario.COIN_BIT:
+                if(fixA.getFilterData().categoryBits == Mario.MARIO_HEAD_BIT)
+                    ((InteractiveTileObject) fixB.getUserData()).onHeadHit((MarioSprite)fixA.getUserData());
+                else
+                    ((InteractiveTileObject) fixA.getUserData()).onHeadHit((MarioSprite)fixB.getUserData());
+                break;
             case Mario.ENEMY_HEAD_BIT | Mario.MARIO_BIT:
                 if(fixA.getFilterData().categoryBits == Mario.ENEMY_HEAD_BIT)
                     ((Enemy)(fixA.getUserData())).hitOnHead();

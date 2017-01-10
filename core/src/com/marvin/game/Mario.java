@@ -27,6 +27,7 @@ public class Mario extends Game {
 	public static final short ENEMY_BIT = 0x40;
 	public static final short ENEMY_HEAD_BIT = 0x80;
 	public static final short ITEM_BIT = 0x100; // 0001 0000 0000
+	public static final short MARIO_HEAD_BIT = 0x200;
 
 	public SpriteBatch batch;
 
@@ -42,6 +43,7 @@ public class Mario extends Game {
 		manager.load("audio/sounds/stomp.wav", Sound.class);
 		manager.load("audio/sounds/breakblock.wav", Sound.class);
 		manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
+		manager.load("audio/sounds/powerup.wav", Sound.class);
 		manager.finishLoading();
 		setScreen(new PlayScreen(this));
 	}
