@@ -177,6 +177,14 @@ public class MarioSprite extends Sprite {
             return State.STANDING;
     }
 
+    public boolean isDead() {
+        return marioIsDead;
+    }
+
+    public float getStateTimer() {
+        return stateTimer;
+    }
+
     public void grow() {
         runGrowAnimation = true;
         marioIsBig = true;
