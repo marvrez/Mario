@@ -1,5 +1,6 @@
 package com.marvin.game.Sprites.Enemies;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.marvin.game.Mario;
 import com.marvin.game.Screens.PlayScreen;
 import com.marvin.game.Sprites.MarioSprite;
+import com.marvin.game.Sprites.Other.FireBall;
 
 import javax.xml.soap.Text;
 
@@ -53,7 +55,7 @@ public class Turtle extends Enemy {
         shape.setRadius(6 / Mario.PPM);
         fDef.filter.categoryBits = Mario.ENEMY_BIT;
         fDef.filter.maskBits = Mario.GROUND_BIT | Mario.COIN_BIT | Mario.BRICK_BIT
-                | Mario.ENEMY_BIT | Mario.OBJECT_BIT | Mario.MARIO_BIT;
+                | Mario.ENEMY_BIT | Mario.OBJECT_BIT | Mario.MARIO_BIT | Mario.FIREBALL_BIT;
 
         fDef.shape = shape;
         b2body.createFixture(fDef).setUserData(this);
@@ -84,10 +86,18 @@ public class Turtle extends Enemy {
         }
 
     }
+    public void hitOnHead(FireBall fireBall) {
+        if(curState != State.STANDING_SHELL) {
+            curState = State.STANDING_SHELL;
+            velocity.x = 0;
+        }
+        else {
+            kick(fireBall.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
+        }
+    }
 
     public TextureRegion getFrame(float dt) {
         TextureRegion region;
-
         switch (curState) {
             case STANDING_SHELL:
                 case MOVING_SHELL:
@@ -146,7 +156,9 @@ public class Turtle extends Enemy {
         else if (curState != State.MOVING_SHELL)
             reverseVelocity(true,false);
     }
-
+    public void onEnemyHit(FireBall fireball) {
+        setToDestroy = true;
+    }
     public void kick(int speed) {
         velocity.x = speed;
         curState = State.MOVING_SHELL;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.marvin.game.Mario;
 import com.marvin.game.Screens.PlayScreen;
 import com.marvin.game.Sprites.MarioSprite;
+import com.marvin.game.Sprites.Other.FireBall;
 
 /**
  * Created by marvinreza on 09.01.2017.
@@ -63,7 +64,7 @@ public class Goomba extends Enemy {
         shape.setRadius(6 / Mario.PPM);
         fDef.filter.categoryBits = Mario.ENEMY_BIT;
         fDef.filter.maskBits = Mario.GROUND_BIT | Mario.COIN_BIT | Mario.BRICK_BIT
-                | Mario.ENEMY_BIT | Mario.OBJECT_BIT | Mario.MARIO_BIT;
+                | Mario.ENEMY_BIT | Mario.OBJECT_BIT | Mario.MARIO_BIT | Mario.FIREBALL_BIT;
 
         fDef.shape = shape;
         b2body.createFixture(fDef).setUserData(this);
@@ -93,11 +94,14 @@ public class Goomba extends Enemy {
             setToDestroy = true;
         else
             reverseVelocity(true,false);
-
     }
 
     @Override
     public void hitOnHead(MarioSprite mario) {
+        setToDestroy = true;
+        Mario.manager.get("audio/sounds/stomp.wav", Sound.class).play();
+    }
+    public void hitOnHead(FireBall fireBall) {
         setToDestroy = true;
         Mario.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }

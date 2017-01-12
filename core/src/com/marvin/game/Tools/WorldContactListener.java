@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.marvin.game.Mario;
 import com.marvin.game.Sprites.Enemies.Enemy;
+import com.marvin.game.Sprites.Other.FireBall;
 import com.marvin.game.Sprites.TileObjects.InteractiveTileObject;
 import com.marvin.game.Sprites.Items.Item;
 import com.marvin.game.Sprites.MarioSprite;
@@ -39,7 +40,7 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
                 break;
-            case Mario.MARIO_BIT | Mario.ENEMY_BIT:
+            case Mario.MARIO_BIT | Mario.ENEMY_BIT: //for turtle
                 if(fixA.getFilterData().categoryBits == Mario.MARIO_BIT)
                     ((MarioSprite) fixA.getUserData()).hit( (Enemy) fixB.getUserData());
                 else
@@ -60,6 +61,18 @@ public class WorldContactListener implements ContactListener {
                     ((Item)fixA.getUserData()).use( (MarioSprite)fixB.getUserData() );
                 else
                     ((Item)fixB.getUserData()).use( (MarioSprite)fixA.getUserData() );
+                break;
+            case Mario.FIREBALL_BIT | Mario.OBJECT_BIT:
+                if(fixA.getFilterData().categoryBits == Mario.FIREBALL_BIT)
+                    ((FireBall)fixA.getUserData()).setToDestroy();
+                else
+                    ((FireBall)fixB.getUserData()).setToDestroy();
+                break;
+            case Mario.ENEMY_HEAD_BIT | Mario.FIREBALL_BIT:
+                if(fixA.getFilterData().categoryBits == Mario.ENEMY_HEAD_BIT)
+                    ((Enemy)(fixA.getUserData())).hitOnHead( (FireBall) fixB.getUserData());
+                else
+                    ((Enemy)(fixB.getUserData())).hitOnHead((FireBall) fixA.getUserData());
                 break;
         }
 

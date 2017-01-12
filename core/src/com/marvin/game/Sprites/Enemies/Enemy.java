@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.marvin.game.Mario;
 import com.marvin.game.Screens.PlayScreen;
 import com.marvin.game.Sprites.MarioSprite;
+import com.marvin.game.Sprites.Other.FireBall;
 
 /**
  * Created by marvinreza on 09.01.2017.
@@ -28,6 +29,7 @@ public abstract class Enemy extends Sprite {
 
     protected abstract void defineEnemy();
     public abstract void hitOnHead(MarioSprite mario);
+    public abstract void hitOnHead(FireBall fireBall);
     public abstract void onEnemyHit(Enemy enemy);
     public abstract void update(float dt);
 

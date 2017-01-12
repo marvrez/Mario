@@ -3,6 +3,7 @@ package com.marvin.game.Sprites;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import com.marvin.game.Mario;
 import com.marvin.game.Screens.PlayScreen;
 import com.marvin.game.Sprites.Enemies.Enemy;
 import com.marvin.game.Sprites.Enemies.Turtle;
+import com.marvin.game.Sprites.Other.FireBall;
 
 /**
  * Created by marvinreza on 07.01.2017.
@@ -33,6 +35,9 @@ public class MarioSprite extends Sprite {
     private boolean marioIsBig, runGrowAnimation;
     private boolean timeToDefineBigMario, timeToRedefineMario;
     private boolean marioIsDead;
+    private PlayScreen screen;
+
+    private Array<FireBall> fireballs;
 
     public World world;
     public Body b2body;
@@ -42,6 +47,7 @@ public class MarioSprite extends Sprite {
     public MarioSprite(PlayScreen screen) {
         //default values
         this.world = screen.getWorld();
+        this.screen = screen;
         curState = State.STANDING;
         prevState = State.STANDING;
         stateTimer = 0;
@@ -84,6 +90,8 @@ public class MarioSprite extends Sprite {
 
         setBounds(0,0, 16 / Mario.PPM, 16 / Mario.PPM);
         setRegion(marioStand);
+
+        fireballs = new Array<FireBall>();
     }
 
     public void update(float dt) {
@@ -97,6 +105,13 @@ public class MarioSprite extends Sprite {
             defineBigMario();
         if(timeToRedefineMario)
             redefineMario();
+
+        for(FireBall ball : fireballs) {
+            ball.update(dt);
+            if(ball.isDestroyed())
+                fireballs.removeValue(ball, true);
+        }
+
     }
 
     public TextureRegion getFrame(float dt) {
@@ -192,10 +207,12 @@ public class MarioSprite extends Sprite {
     }
 
     public void grow() {
-        runGrowAnimation = true;
-        marioIsBig = true;
-        timeToDefineBigMario = true;
-        setBounds(getX(), getY(), getWidth(), getHeight() * 2);
+        if (!isBig()) {
+            runGrowAnimation = true;
+            marioIsBig = true;
+            timeToDefineBigMario = true;
+            setBounds(getX(), getY(), getWidth(), getHeight() * 2);
+        }
         Mario.manager.get("audio/sounds/powerup.wav", Sound.class).play();
     }
 
@@ -258,6 +275,17 @@ public class MarioSprite extends Sprite {
         b2body.createFixture(fDef).setUserData(this);
         timeToDefineBigMario = false;
     }
+
+    public void fire(){
+        fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight ? true : false));
+    }
+
+    public void draw(Batch batch){
+        super.draw(batch);
+        for(FireBall ball : fireballs)
+            ball.draw(batch);
+    }
+
 
     public void defineMario() {
         BodyDef bDef = new BodyDef();
