@@ -29,9 +29,9 @@ public class WorldContactListener implements ContactListener {
                 break;
             case Mario.ENEMY_HEAD_BIT | Mario.MARIO_BIT:
                 if(fixA.getFilterData().categoryBits == Mario.ENEMY_HEAD_BIT)
-                    ((Enemy)(fixA.getUserData())).hitOnHead();
+                    ((Enemy)(fixA.getUserData())).hitOnHead( (MarioSprite)fixB.getUserData());
                 else
-                    ((Enemy)(fixB.getUserData())).hitOnHead();
+                    ((Enemy)(fixB.getUserData())).hitOnHead((MarioSprite)fixA.getUserData());
                 break;
             case Mario.ENEMY_BIT | Mario.OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == Mario.ENEMY_BIT)
@@ -41,9 +41,9 @@ public class WorldContactListener implements ContactListener {
                 break;
             case Mario.MARIO_BIT | Mario.ENEMY_BIT:
                 if(fixA.getFilterData().categoryBits == Mario.MARIO_BIT)
-                    ((MarioSprite) fixA.getUserData()).hit();
+                    ((MarioSprite) fixA.getUserData()).hit( (Enemy) fixB.getUserData());
                 else
-                    ((MarioSprite) fixB.getUserData()).hit();
+                    ((MarioSprite) fixB.getUserData()).hit( (Enemy) fixA.getUserData());
                 break;
             case Mario.ENEMY_BIT | Mario.ENEMY_BIT:
                 ((Enemy)fixA.getUserData()).reverseVelocity(true, false);

@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.marvin.game.Mario;
 import com.marvin.game.Screens.PlayScreen;
+import com.marvin.game.Sprites.MarioSprite;
 
 import javax.xml.soap.Text;
 
@@ -17,7 +18,10 @@ import javax.xml.soap.Text;
  * Created by marvinreza on 12.01.2017.
  */
 public class Turtle extends Enemy {
-    public enum State {WALKING, SHELL}
+    public static final int KICK_LEFT_SPEED = -2;
+    public static final int KICK_RIGHT_SPEED = 2;
+
+    public enum State {WALKING, STANDING_SHELL, MOVING_SHELL}
     public State curState, prevState;
     private float stateTime;
     private Animation walkAnimation;
@@ -64,16 +68,19 @@ public class Turtle extends Enemy {
         head.set(vertice);
 
         fDef.shape = head;
-        fDef.restitution = 0.5f;
+        fDef.restitution = 1.5f;
         fDef.filter.categoryBits = Mario.ENEMY_HEAD_BIT;
         b2body.createFixture(fDef).setUserData(this);
     }
 
     @Override
-    public void hitOnHead() {
-        if(curState != State.SHELL) {
-            curState = State.SHELL;
+    public void hitOnHead(MarioSprite mario) {
+        if(curState != State.STANDING_SHELL) {
+            curState = State.STANDING_SHELL;
             velocity.x = 0;
+        }
+        else {
+            kick(mario.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
         }
 
     }
@@ -82,7 +89,9 @@ public class Turtle extends Enemy {
         TextureRegion region;
 
         switch (curState) {
-            case SHELL:
+            case STANDING_SHELL:
+                case MOVING_SHELL:
+
                 region = shell;
                 break;
             case WALKING:
@@ -106,12 +115,21 @@ public class Turtle extends Enemy {
     @Override
     public void update(float dt) {
         setRegion(getFrame(dt));
-        if (curState == State.SHELL && stateTime > 5) {
+        if (curState == State.STANDING_SHELL && stateTime > 5) {
             curState = State.WALKING;
             velocity.x = 1;
         }
 
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - 8 / Mario.PPM);
         b2body.setLinearVelocity(velocity);
+    }
+
+    public void kick(int speed) {
+        velocity.x = speed;
+        curState = State.MOVING_SHELL;
+    }
+
+    public State getCurState() {
+        return curState;
     }
 }
