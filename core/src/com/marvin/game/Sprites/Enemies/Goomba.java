@@ -88,6 +88,14 @@ public class Goomba extends Enemy {
             super.draw(batch);
     }
 
+    public void onEnemyHit(Enemy enemy) {
+        if(enemy instanceof Turtle && ((Turtle)enemy).curState == Turtle.State.MOVING_SHELL)
+            setToDestroy = true;
+        else
+            reverseVelocity(true,false);
+
+    }
+
     @Override
     public void hitOnHead(MarioSprite mario) {
         setToDestroy = true;
